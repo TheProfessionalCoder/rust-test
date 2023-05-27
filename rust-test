@@ -1,0 +1,151 @@
+use std::io;
+
+fn calculate_factorial(n: u64) -> u64 {
+    if n == 0 {
+        return 1;
+    }
+    n * calculate_factorial(n - 1)
+}
+
+fn generate_fibonacci_sequence(n: usize) -> Vec<u64> {
+    let mut fib_sequence = vec![0, 1];
+    for i in 2..n {
+        let fib_number = fib_sequence[i - 1] + fib_sequence[i - 2];
+        fib_sequence.push(fib_number);
+    }
+    fib_sequence
+}
+
+fn check_prime_number(n: u64) -> bool {
+    if n < 2 {
+        return false;
+    }
+    for i in 2..(n as f64).sqrt() as u64 + 1 {
+        if n % i == 0 {
+            return false;
+        }
+    }
+    true
+}
+
+fn bubble_sort(numbers: &mut [i32]) {
+    let length = numbers.len();
+    for i in 0..length {
+        for j in 0..(length - i - 1) {
+            if numbers[j] > numbers[j + 1] {
+                numbers.swap(j, j + 1);
+            }
+        }
+    }
+}
+
+fn main() {
+    println!("Welcome to the Random Rust Program!");
+
+    loop {
+        println!("\nPlease choose an option:");
+        println!("1. Calculate factorial");
+        println!("2. Generate Fibonacci sequence");
+        println!("3. Check if a number is prime");
+        println!("4. Sort a list of numbers");
+        println!("5. Quit");
+
+        let mut choice = String::new();
+        io::stdin()
+            .read_line(&mut choice)
+            .expect("Failed to read input.");
+
+        let choice: u8 = match choice.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Invalid choice. Please try again.");
+                continue;
+            }
+        };
+
+        match choice {
+            1 => {
+                println!("Enter a number to calculate its factorial:");
+                let mut input = String::new();
+                io::stdin()
+                    .read_line(&mut input)
+                    .expect("Failed to read input.");
+
+                let number: u64 = match input.trim().parse() {
+                    Ok(num) => num,
+                    Err(_) => {
+                        println!("Invalid number. Please try again.");
+                        continue;
+                    }
+                };
+
+                let factorial = calculate_factorial(number);
+                println!("Factorial of {} is: {}", number, factorial);
+            }
+            2 => {
+                println!("Enter the number of Fibonacci numbers to generate:");
+                let mut input = String::new();
+                io::stdin()
+                    .read_line(&mut input)
+                    .expect("Failed to read input.");
+
+                let number: usize = match input.trim().parse() {
+                    Ok(num) => num,
+                    Err(_) => {
+                        println!("Invalid number. Please try again.");
+                        continue;
+                    }
+                };
+
+                let fibonacci_sequence = generate_fibonacci_sequence(number);
+                println!("Fibonacci sequence: {:?}", fibonacci_sequence);
+            }
+            3 => {
+                println!("Enter a number to check if it's prime:");
+                let mut input = String::new();
+                io::stdin()
+                    .read_line(&mut input)
+                    .expect("Failed to read input.");
+
+                let number: u64 = match input.trim().parse() {
+                    Ok(num) => num,
+                    Err(_) => {
+                        println!("Invalid number. Please try again.");
+                        continue;
+                    }
+                };
+
+                let is_prime = check_prime_number(number);
+                if is_prime {
+                    println!("{} is prime.", number);
+                } else {
+                    println!("{} is not prime.", number);
+                }
+            }
+            4 => {
+                println!("Enter a list of numbers to sort (space-separated):");
+                let mut input = String::new();
+                io::stdin()
+                    .read_line(&mut input)
+                    .expect("Failed to read input.");
+
+                let numbers: Vec<i32> = input
+                    .split_whitespace()
+                    .map(|s| s.parse().unwrap())
+                    .collect();
+
+                let mut numbers_array = numbers.clone().into_boxed_slice();
+                bubble_sort(&mut numbers_array);
+
+                println!("Sorted numbers: {:?}", numbers_array);
+            }
+            5 => {
+                println!("Thank you for using the Random Rust Program!");
+                break;
+            }
+            _ => {
+                println!("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
